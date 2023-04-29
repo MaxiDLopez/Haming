@@ -31,7 +31,7 @@ public class Archivo{
         sobrante = new ArrayList<Integer>();
 
         try {
-            FileReader fr = new FileReader("C:\\Users\\Carolina\\Desktop\\MiercolesNoche\\lectura.txt");//Abre el arhicvo
+            FileReader fr = new FileReader("C:\\Users\\Carolina\\Desktop\\Haming\\PruebasArchivo\\lectura.txt");//Abre el arhicvo
 
             BufferedReader br = new BufferedReader(fr);
             caract = br.read();//leer un caracterer

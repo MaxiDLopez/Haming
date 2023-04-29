@@ -209,24 +209,24 @@ public class funciones {
             
             if(error){//SI viene con errores
                 if(hamming.size() == 32){
-                    Archivo.escribir("HA32-E", hamming);
+                    Archivo.escribir("HE1", hamming);
                 }
                 else if(hamming.size() == 2048){
-                    Archivo.escribir("HA2048-E", hamming);
+                    Archivo.escribir("HE2", hamming);
                 }
                 else{//bloque de 65536
-                    Archivo.escribir("HA65536-E", hamming);
+                    Archivo.escribir("HE3", hamming);
                 }
             }
             else{//No tiene errores
                 if(hamming.size() == 32){
-                    Archivo.escribir("HA32", hamming);
+                    Archivo.escribir("HA1", hamming);
                 }
                 else if(hamming.size() == 2048){
-                    Archivo.escribir("HA2048", hamming);
+                    Archivo.escribir("HA2", hamming);
                 }
                 else{//bloque de 65536
-                    Archivo.escribir("HA65536", hamming);
+                    Archivo.escribir("HA3", hamming);
                 }
             }
 
