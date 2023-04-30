@@ -265,11 +265,10 @@ public class Archivo{
                 caracter = funciones.bitstoCharacters(bits);
 
                 for(char i:caracter){//imprimimos cada caracter leido
+                    System.out.println(i);
                     bw.write(i);
                 }
 
-
-                System.out.println("información agregada!");
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

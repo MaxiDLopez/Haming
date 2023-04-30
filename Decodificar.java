@@ -10,6 +10,7 @@ public class Decodificar{
     private static int caract;
 
     private static ArrayList<Integer> bloque = new ArrayList<Integer>();
+    private static ArrayList<Integer> aux = new ArrayList<Integer>();
     private static ArrayList<Integer> informacion = new ArrayList<Integer>();;
     private static ArrayList<Integer> contenedor = new ArrayList<Integer>();
     
@@ -44,6 +45,7 @@ public class Decodificar{
                 bloque.clear();
                 informacion.clear();
                 contenedor.clear();
+                aux.clear();
 
                 fr = new FileReader(archivo);
                 br = new BufferedReader(fr);
@@ -51,19 +53,23 @@ public class Decodificar{
                 caract=br.read();
 
                 while(caract != -1){//Si el caracter no es nulo
-
-                    System.out.println(caract);
                 
-                    bloque = funciones.CaracterToBits(caract);
+                    aux = funciones.CaracterToBits(caract);
+                    for(int i:aux){
+                        bloque.add(i);
+                    }
 
-                    while( (bloque.size()%bits) == 0){//Completamos un bloque pero con bits de control
+                    if( bloque.size() == bits){//Completamos un bloque pero con bits de control
 
-                        informacion = funciones.decodificar(bloque);//Decodficamos el bloque y agregamos la informacion en un nuevo arreglo
+                        aux = funciones.decodificar(bloque);//Decodficamos el bloque y agregamos la informacion en un nuevo arreglo
                         bloque.clear();//Reiniciamos el bloque
+                        for(int i:aux){
+                            informacion.add(i);
+                        }
 
                         if( informacion.size() >= bits){//Completamos un bloque solamente de informacion
 
-                            while( (contenedor.size()%bits) != 0 ){
+                            while( contenedor.size() < bits ){
 
                                 contenedor.add(informacion.get(0));//Metemos el primer bit del arreglo aux
                                 informacion.remove(0);//Borramos ese elemento que ingresamos
@@ -72,7 +78,6 @@ public class Decodificar{
 
                             Archivo.escribir(nombre, contenedor);
                             contenedor.clear();
-                        
                         }
 
                         if( (contenedor.size()%bits) == 0){//Preguntamos si se detuvo el while porque ya esta listo para escribir en el archivo

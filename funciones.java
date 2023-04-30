@@ -49,15 +49,14 @@ public class funciones {
     //Mete los bits de un caracter en un bitset de 8 bits
 
     public static ArrayList<Integer> CaracterToBits(int caracter){
-        ArrayList<Integer> arreglo;
-        arreglo = new ArrayList<Integer>();
+        ArrayList<Integer> arreglo = new ArrayList<Integer>();
         int j=0;
 
         for (int i = 0; i < 8; i++) {
             if(((caracter >> (7-j)) & 1) == 1){
-                arreglo.add(i,1);
+                arreglo.add(1);
             }else{
-                arreglo.add(i,0);
+                arreglo.add(0);
             }
             j++;
         }
