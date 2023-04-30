@@ -106,15 +106,43 @@ public class funciones {
         }
         return arreglo;
     }
- 
+    
+    //Da valor a los bits de control
+    public static ArrayList<Integer> control(ArrayList<Integer> arreglo, int r)       //r es la cantidad de bits de control
+    {
+        for (int i = 0; i < r; i++) {
+            int x = (int)Math.pow(2, i);    // X tiene la posición del bit de control
+            arreglo.set((x-1), 0);
+            int result;
+
+            for (int j = 1; j < arreglo.size(); j++) {
+                if (((j >> i) & 1) == 1) {
+                    if (x-1 != j-1){     
+                    //System.out.println("El bit con indice "+ (j-1) + " entra en el control del bit con indice " + (x-1)); 
+                    result = (arreglo.get((x-1)) ^ arreglo.get((j-1)));
+                  //  System.out.println("Xor entre pos "+(x-1)+ " y pos "+(j-1)+" : " +result);        
+                    arreglo.set(x-1, result);  //Actualizo bit de control
+                    }
+                }
+            }
+           
+           // System.out.println("Bit de control " + x + " = " + arreglo.get(x-1));  //Muestra los bits de control y su valor
+        }
+        return arreglo;
+    }
+
     static int getParityBit(ArrayList<Integer> returnData,int pow){
         int parityBit = 0;  
         int size = returnData.size();
-        
+        System.out.println("Size es "+size);
+//Problema
         for (int i = 0; i < size; i++) {
+          
             if(returnData.get(i) != 2){
+                System.out.println("i vale: "+i);
                 int k = (i+1);
                 String str = Integer.toBinaryString(k);  
+                System.out.println("STR: "+str);
                 int temp = ((Integer.parseInt(str)) / ((int) Math.pow(10, pow))) % 10;  
                 if(temp == 1){
                     if(returnData.get(i) == 1){
@@ -123,7 +151,16 @@ public class funciones {
                 }
             }
         }
-        
+// problema cerrado
+
+        for (int j = 0; j < size; j++) {
+            int x = (int)Math.pow(2, pow); //X es la posición del bit de control
+
+            if (returnData.get(j) != 2) {
+                
+            }
+        }
+
         return parityBit;
     }
 
@@ -150,7 +187,7 @@ public class funciones {
     }
  
         public static ArrayList<Integer> aplicarHamming(ArrayList<Integer>array,int r, boolean error){ //r es la cantidad de bits de control
-            
+    
             ArrayList<Integer> resto;
             resto = new ArrayList<Integer>();
             ArrayList<Integer> hamming;
@@ -159,14 +196,16 @@ public class funciones {
             int j=0;
             int k=0;
             int tope = array.size();
-
-            //Guardo los ultimos bits que van a sobrar y luego los elimino del arreglo con info
+      
+            //Guardo los ultimos bits que van a sobrar y luego los elimino del arreglo con info     
             for (int i = 0; i < r+1 ; i++) {     
                 resto.add(i,array.get(desde+i));
             }
+    
             for (int n = desde; n < tope; n++) {
                 array.remove(array.size()-1);
             }
+            System.out.println("Guarde las sobras");
 
             //Distribuir data y bits de control en el modulo
             for(int i = 1; i <= tope; i++) {  
@@ -178,12 +217,23 @@ public class funciones {
                     hamming.add((k+j), array.get(k++));  
                 }  
             }
-        
-            //Dar valor a los bits de paridad
-            for(int i = 0; i < r; i++) {  
-                hamming.set(((int) Math.pow(2, i))-1, getParityBit(hamming, i));
-            }    
 
+         System.out.println("Distribui la data");
+         System.out.println("Size es: "+hamming.size());
+         System.out.println("El vector es: "+hamming);
+         System.out.println("CHECK");
+
+            //Dar valor a los bits de paridad
+            /* 
+            for(int i = 0; i < r; i++) {  
+                System.out.println("Le doy valor al bit: "+((int) Math.pow(2, i)));
+                hamming.set(((int) Math.pow(2, i))-1, getParityBit(hamming, i));
+                System.out.println("Ya le di valor");
+            }    
+            */
+            hamming = control(hamming, r);
+            System.out.println("Di valor a los bits de paridad");
+           
             //Bit 32
              hamming.set(hamming.size()-1, ultimoBit(hamming, r));
             

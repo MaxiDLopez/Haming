@@ -11,7 +11,6 @@ public class Archivo{
     public static ArrayList<Integer> aux;
 
     public static void proteger(int bloque, int bitsControl, Boolean error){
-        
         int caract;
         arreglo.clear();
 
@@ -31,16 +30,15 @@ public class Archivo{
         sobrante = new ArrayList<Integer>();
 
         try {
-            FileReader fr = new FileReader("C:\\Users\\Carolina\\Desktop\\MiercolesNoche\\lectura.txt");//Abre el arhicvo
-
+            //FileReader fr = new FileReader("C:\\Users\\Carolina\\Desktop\\MiercolesNoche\\lectura.txt");//Abre el arhicvo
+            FileReader fr = new FileReader("C:\\Users\\Emiliano\\Desktop\\m1\\texto.txt");//Abre el arhicvo
             BufferedReader br = new BufferedReader(fr);
             caract = br.read();//leer un caracterer
-          
 
             while(caract != -1) {//Si este caracter es distinto de nulo
 
                 int j=0;
-             
+
                 if (sizeAuxiliar != 0) {        //Si hay bits de la vuelta anterior, entramos al if
                     principal = funciones.agruparBits(principal, auxiliar, 0, auxiliar.size());// esta funcion mete en el bloque el resto del anterior
                     sizePrincipal += sizeAuxiliar;
@@ -82,7 +80,7 @@ public class Archivo{
 
                 caract = br.read();
             }
-
+            System.out.println("sali del while");
               if (sizeAuxiliar != 0 || sizePrincipal != 0) { //Si quedaron cosas sueltas que no entran en un bloque de 32
               ultimo=true;
                 if (sizeAuxiliar != 0){
@@ -91,7 +89,11 @@ public class Archivo{
                 } 
 
                 principal = funciones.rellenarConCeros(principal, bloque);
-                sobrante = funciones.aplicarHamming(principal, 5, error);
+                System.out.println("Estoy por aplicar hamming");
+                System.out.println("Principal es de tamaño: "+principal.size());
+                
+               //r valia 5
+                sobrante = funciones.aplicarHamming(principal, bitsControl, error);
                 
                 //Imprimimos la ultima parte
                     
