@@ -249,10 +249,10 @@ public class Archivo{
                 
                 File f = new File(nuevo);
                 
-                // Si el archivo no existe, se crea!S
+                // Si el archivo no existe, se crea
                 if (!f.exists()) {
                     f.createNewFile();
-                    System.out.println("\nARCHIVO CREADO\n");
+                    System.out.println("\nARCHIVO CREADO: " +nuevo + "\n");
                 }
 
 
@@ -260,7 +260,7 @@ public class Archivo{
                 fw = new FileWriter(f.getAbsoluteFile(), true);
                 bw = new BufferedWriter(fw);
 
-               for(int i=0; i < funciones.convertirInvers(arreglo).length ; i++){
+               for(int i=0; i < (arreglo.size()/8) ; i++){
                     
                     fw.write(funciones.convertirInvers(arreglo)[i]);
                     
