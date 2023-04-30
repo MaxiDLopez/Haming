@@ -13,8 +13,10 @@ public class funciones {
     public static int acumulador=0;
 
     public static char[] convertirInvers(ArrayList<Integer> arreglo){
-
-        int pos=0, exponente;
+     char arr1[] = new char[4];
+     char arr2[] = new char[256];
+     char arr3[] = new char[8192];
+     int pos=0, exponente;
 
         for(int j=0; j<(arreglo.size()/8); j++){
 
@@ -26,7 +28,6 @@ public class funciones {
                 if (arreglo.get(i) == 1){//SI el bit es 1, entonces lo elevamos a la potencia correspondiente
                     
                     acumulador = acumulador + (int)(Math.pow(2, (double)exponente));
-                    
                 }
                 //En el caso de que el bit es 0, no hace falta hacer nada
                 exponente=exponente-1;

@@ -12,7 +12,7 @@ public class menu {
         int opc, opc2;
 
         do{
-            System.out.println("Hello world");
+
             System.out.println("PROYECTO HAMING\n");
             do{
 

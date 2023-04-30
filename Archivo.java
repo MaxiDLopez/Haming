@@ -71,7 +71,7 @@ public class Archivo{
                     sobrante = funciones.aplicarHamming(principal, (int)(Math.log(bloque)/Math.log(2)), error);//Sobrante tiene los bits que sobraron,se los debo agregar al vector resto "auxiliar"
                     auxiliar = funciones.agruparBits(auxiliar, sobrante, sizeAuxiliar,sobrante.size());
                     sizeAuxiliar = auxiliar.size();
-
+                    
                     //LO PASAMOS A UN TXT CON RESPECTIVO NOMBRE DEPENDIENDO DEL BLOQUE
                     
                     principal.clear();
@@ -136,7 +136,7 @@ public class Archivo{
         int first;
 //
         try{
-            fr = new FileReader("C:\\Users\\Carolina\\Desktop\\Ultimatum-20230425T035817Z-001\\Ultimatum\\lectura.txt");
+            fr = new FileReader("C:\\Users\\Emiliano\\Desktop\\Haming-alternativo\\HA32.txt");
             
             if(fr.ready()){//Si el archivo esta listo para ser leido
 
@@ -190,7 +190,7 @@ public class Archivo{
                         posInfo+= a+1;         //Posicion informacion = Posicion informacion + cantidad que leyo de info
                         contadorSalidas-= a+1;  // ContadorOutput = ContadorOutput - cantidad de bits sacados de info
                         contEscritor=0;     //Tiene 0 porque ya se guardo Escritor
-                        escribir("Decodificado", escritor);
+                        escribirCaracter("Decodificado", escritor);
                         escritor.clear();
                     }
             
@@ -200,7 +200,7 @@ public class Archivo{
                         }
                         posInfo +=8;
                         contadorSalidas -=8;
-                        escribir("Decodificado", escritor);
+                        escribirCaracter("Decodificado", escritor);
                         escritor.clear();
                     }
                   
@@ -214,16 +214,19 @@ public class Archivo{
                                 
                 }
 
+
                 boolean basura = true;
-                for (int index = 0; index < auxiliar.size(); index++) {
-                    if (auxiliar.get(index) == 1) {
+                int c = 0;
+                do {
+                    if (auxiliar.get(c) == 1) {
                         basura = false;
                     }
-                }
+                    c++;
+                } while (basura == true && c<8 );
 
                 if (!basura) { //Me quedo algo en auxiliar
                     auxiliar = funciones.rellenarConCeros(auxiliar, 8);
-                    escribir("Decodificada", auxiliar);
+                    escribirCaracter("Decodificada", auxiliar);
                 }
 
             
@@ -240,8 +243,47 @@ public class Archivo{
 
     
     }
+    //
+    public static void escribirCaracter(String nuevo, ArrayList<Integer> arreglo){
+        
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+            
+            File f = new File(nuevo);
+            
+            // Si el archivo no existe, se crea!S
+            if (!f.exists()) {
+                f.createNewFile();
+                System.out.println("\nARCHIVO CREADO\n");
+            }
 
 
+            // flag true, indica adjuntar información al archivo.
+            fw = new FileWriter(f.getAbsoluteFile(), true);
+            bw = new BufferedWriter(fw);
+                
+            fw.write(funciones.convertirInvers(arreglo)[0]);
+                
+
+            System.out.println("información agregada!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                            //Cierra instancias de FileWriter y BufferedWriter
+                if (bw != null)
+                    bw.close();
+                if (fw != null)
+                    fw.close();
+            
+            }catch(Exception e){ //Si muestro un error en la escritura, lo muestra
+                    JOptionPane.showMessageDialog(null,"Ha sucedido un error en escribir: "+e);
+            }
+        }
+}
+    //
     public static void escribir(String nuevo, ArrayList<Integer> arreglo){
         
             BufferedWriter bw = null;
