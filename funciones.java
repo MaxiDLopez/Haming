@@ -7,19 +7,18 @@ import java.io.*;
 
 public class funciones {
 
-    public static char arr1[] = new char[4];
-    public static char arr2[] = new char[256];
-    public static char arr3[] = new char[8192];
+    private static ArrayList<Character> caracteres = new ArrayList<Character>();
     public static int acumulador=0;
 
-    public static char[] convertirInvers(ArrayList<Integer> arreglo){
+    public static ArrayList<Character> bitstoCharacters(ArrayList<Integer> arreglo){
 
         int pos=0, exponente;
+        caracteres.clear();
 
-        for(int j=0; j<(arreglo.size()/8); j++){
+        for(int j=0; j<(arreglo.size()/8); j++){//Tomamos cada caracter en forma de bits
 
             acumulador = 0;
-            exponente = 7;  //7?
+            exponente = 7;
 
             for(int i=pos; i<pos+8 ; i++){
         
@@ -32,19 +31,9 @@ public class funciones {
                 exponente=exponente-1;
             }
             pos+=8;
-            if(arreglo.size() == 32)//Trabajamos con 32 bits
-                arr1[j] = (char)acumulador;
-            else if(arreglo.size() == 2048)//Trabajamos con 2048 bits
-                arr2[j] = (char)acumulador;
-            else//Trabajamos con 65536 bits
-                arr3[j]= (char)acumulador;
+            caracteres.add((char)acumulador);
         }
-        if(arreglo.size() == 32)//Devolvemos con 4 caracteres
-            return arr1;
-        else if(arreglo.size() == 2048)//Devolvemos con 256 caracteres
-            return arr2;
-        else//Devolvemos con 8192 caracteres
-            return arr3;
+        return caracteres;
 
     }
    
@@ -63,11 +52,9 @@ public class funciones {
         ArrayList<Integer> arreglo;
         arreglo = new ArrayList<Integer>();
         int j=0;
-        boolean valor=false;
 
         for (int i = 0; i < 8; i++) {
-            valor= ((caracter >> (7-j)) & 1) == 1;
-            if(valor==true){
+            if(((caracter >> (7-j)) & 1) == 1){
                 arreglo.add(i,1);
             }else{
                 arreglo.add(i,0);
@@ -209,24 +196,24 @@ public class funciones {
             
             if(error){//SI viene con errores
                 if(hamming.size() == 32){
-                    Archivo.escribir("HE1", hamming);
+                    Archivo.escribir("HE1.txt", hamming);
                 }
                 else if(hamming.size() == 2048){
-                    Archivo.escribir("HE2", hamming);
+                    Archivo.escribir("HE2.txt", hamming);
                 }
                 else{//bloque de 65536
-                    Archivo.escribir("HE3", hamming);
+                    Archivo.escribir("HE3.txt", hamming);
                 }
             }
             else{//No tiene errores
                 if(hamming.size() == 32){
-                    Archivo.escribir("HA1", hamming);
+                    Archivo.escribir("HA1.txt", hamming);
                 }
                 else if(hamming.size() == 2048){
-                    Archivo.escribir("HA2", hamming);
+                    Archivo.escribir("HA2.txt", hamming);
                 }
                 else{//bloque de 65536
-                    Archivo.escribir("HA3", hamming);
+                    Archivo.escribir("HA3.txt", hamming);
                 }
             }
 

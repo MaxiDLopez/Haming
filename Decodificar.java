@@ -9,124 +9,125 @@ public class Decodificar{
 
     private static int caract;
 
-    private static ArrayList<Integer> arreglo;
-    private static ArrayList<Integer> aux;
-    private static ArrayList<Integer> contenedor;
+    private static ArrayList<Integer> bloque = new ArrayList<Integer>();
+    private static ArrayList<Integer> informacion = new ArrayList<Integer>();;
+    private static ArrayList<Integer> contenedor = new ArrayList<Integer>();
     
+    private static File archivo;
     private static FileReader fr;
     private static BufferedReader br;
 
-    private static File archivo;
-    private static FileWriter fw;
-    private static BufferedWriter bw;
     private static String nombre;
-    
-    private static boolean existe; 
 
-    public static ArrayList<Integer> leerArchivo(int bits) throws IOException{//TIRA UNA EXCEPCION EN CASO DE NO ENCONTRAR UN ARCHIVO
+    public static void leerArchivo(int bits) {//TIRA UNA EXCEPCION EN CASO DE NO ENCONTRAR UN ARCHIVO
 
-        existe = false;
-        arreglo.clear();
-        aux.clear();
-        contenedor.clear();
 
-        if (bits == 32){//Tenemos que leer el archivo que fue codificado en 32 bits
+        try{
 
-            try{
-            
-                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\PruebasArchivo\\HA1.txt");
-            
-                if(archivo.exists() & archivo.isFile()){//EL ARCHIVO EXISTE
-                    existe = true;
-                    nombre = "DE1.txt";
-                }
-                else{
-                    System.out.println("\nAUN NO SE REALIZADO UNA CODIFICACION DE HAMING 32\n");
-                }
-
-            }catch(Exception e){
-                System.out.println("\nERROR CUANDO ABRIMOS HA1.txt: "+ e.getMessage());
+            if(bits == 32){//Obetener la ruta del archivo correspondiente
+                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\HA1.txt");
+                nombre = "DE1.txt";
+            }
+            else if(bits == 2048){
+                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\HA2.txt");
+                nombre = "DE2.txt";
+            }
+            else{
+                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\HA3.txt");
+                nombre = "DE3.txt";
             }
 
+            if(archivo.exists() & archivo.isFile()){//Si existe la ruta y es un archivo
 
-        
-        }
-        else if(bits == 2048){//Tenemos que leer el archivo que fue codificado en 2048 bits
+                System.out.println("\nEl archivo codificado existe\n");
 
-            try{
+                bloque.clear();
+                informacion.clear();
+                contenedor.clear();
 
-                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\PruebasArchivo\\HA2.txt");
-            
-                if(archivo.exists() & archivo.isFile()){//EL ARCHIVO EXISTE
-                    existe = true;
-                    nombre = "DE2.txt";
-                }
-                else{
-                    System.out.println("\nAUN NO SE REALIZADO UNA CODIFICACION DE HAMING 2048\n");
-                }
-            
-            }catch(Exception e){
-                System.out.println("\nERROR CUANDO ABRIMOS HA2.txt: "+ e.getMessage());
-            }
-        
-        }
-        else{//Tenemos que leer el archivo que fue codificado en 65536 bits
+                fr = new FileReader(archivo);
+                br = new BufferedReader(fr);
 
-            try{
+                caract=br.read();
 
-                archivo = new File("C:\\Users\\Carolina\\Desktop\\Haming\\PruebasArchivo\\HA3.txt");
-            
-                if(archivo.exists() & archivo.isFile()){//EL ARCHIVO EXISTE
-                    existe = true;
-                    nombre = "DE3.txt";
-                }
-                else{
-                    System.out.println("\nAUN NO SE REALIZADO UNA CODIFICACION DE HAMING 65536\n");
-                }
-            
-            }catch(Exception e){
-                System.out.println("\nERROR CUANDO ABRIMOS HA3.txt: "+ e.getMessage());
-            }
+                while(caract != -1){//Si el caracter no es nulo
 
-
-        
-        }
-
-
-        if(existe){//SI EL ARCHIVO EXISTE
-            
-            fr = new FileReader(archivo);
-            br = new BufferedReader(fr);
-
-            caract = br.read();
-
-            while(caract != -1){//SI el caracter leido no es nulo
-
-                arreglo = funciones.CaracterToBits(caract);
-
-                if ( (arreglo.size()%bits) == 0){//Si el arreglo ya llego a completar el bloque
-
-                    aux = funciones.decodificar(arreglo);//Aux se queda con la informacion sin los bits de control
-                    arreglo.clear();//reiniciamos el bloque
-
-                    if (!contenedor.isEmpty()){
-                        
-                    }
-                    
-
+                    System.out.println(caract);
                 
+                    bloque = funciones.CaracterToBits(caract);
 
-                    arreglo.clear();
+                    while( (bloque.size()%bits) == 0){//Completamos un bloque pero con bits de control
+
+                        informacion = funciones.decodificar(bloque);//Decodficamos el bloque y agregamos la informacion en un nuevo arreglo
+                        bloque.clear();//Reiniciamos el bloque
+
+                        if( informacion.size() >= bits){//Completamos un bloque solamente de informacion
+
+                            while( (contenedor.size()%bits) != 0 ){
+
+                                contenedor.add(informacion.get(0));//Metemos el primer bit del arreglo aux
+                                informacion.remove(0);//Borramos ese elemento que ingresamos
+                            
+                            }
+
+                            Archivo.escribir(nombre, contenedor);
+                            contenedor.clear();
+                        
+                        }
+
+                        if( (contenedor.size()%bits) == 0){//Preguntamos si se detuvo el while porque ya esta listo para escribir en el archivo
+
+                            Archivo.escribir(nombre, contenedor);//Pasamos a escribir en el archivo
+                            contenedor.clear();//Borramos todo ya que lo escribimos
+                        
+                        }
+                    
+                    }
+
+                    caract=br.read();
                 }
-            
-                caract = br.read();
+
+                if( (bloque.size()%bits) != 0){//Nos quedamos con un bloque sin completar
+                    while( (bloque.size()%bits) != 0){
+                        bloque.add(0);
+                    }
+                    informacion = funciones.decodificar(bloque);
+                    bloque.clear();
+                }//Ya completamos el ultimo bloque codificado
+
+                while( informacion.size()>bits ){//Hay mas de un caracter
+
+                    while( (contenedor.size()%bits) != 0 ){
+
+                        contenedor.add(informacion.get(0));//Metemos el primer bit del arreglo aux
+                        informacion.remove(0);//Borramos ese elemento que ingresamos
+                    
+                    }
+                    Archivo.escribir(nombre, contenedor);
+                    contenedor.clear();
+                
+                }
+
+                if(!informacion.isEmpty()){
+                    while( (informacion.size()%bits) != 0){
+                        informacion.add(0);
+                    }
+                }
+
+                Archivo.escribir(nombre, informacion);
+                informacion.clear();
+
             }
 
-            
-        }
-    
+            else{//Si no existe el archivo
+                System.out.println("\nEl archivo codificado correspondiente no existe\n");
+            }
 
-        return arreglo;
+        
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
 }

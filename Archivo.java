@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class Archivo{
 
     public static ArrayList<Integer> arreglo = new ArrayList<Integer>();
+    public static ArrayList<Character> caracter = new ArrayList<Character>();
     public static ArrayList<Integer> aux;
 
     public static void proteger(int bloque, int bitsControl, Boolean error){
@@ -240,10 +241,11 @@ public class Archivo{
     }
 
 
-    public static void escribir(String nuevo, ArrayList<Integer> arreglo){
+    public static void escribir(String nuevo, ArrayList<Integer> bits){
         
             BufferedWriter bw = null;
             FileWriter fw = null;
+            caracter.clear();
 
             try {
                 
@@ -260,11 +262,12 @@ public class Archivo{
                 fw = new FileWriter(f.getAbsoluteFile(), true);
                 bw = new BufferedWriter(fw);
 
-               for(int i=0; i < (arreglo.size()/8) ; i++){
-                    
-                    fw.write(funciones.convertirInvers(arreglo)[i]);
-                    
+                caracter = funciones.bitstoCharacters(bits);
+
+                for(char i:caracter){//imprimimos cada caracter leido
+                    bw.write(i);
                 }
+
 
                 System.out.println("información agregada!");
             } catch (IOException e) {
