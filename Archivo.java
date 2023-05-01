@@ -71,6 +71,8 @@ public class Archivo{
                                 
                 if (sizePrincipal == bloque) { //si array principal está lleno, puede enviarse a la funcion que aplique hamming
                     
+                    System.out.println(principal);
+
                     sobrante = funciones.aplicarHamming(principal, (int)(Math.log(bloque)/Math.log(2)), error);//Sobrante tiene los bits que sobraron,se los debo agregar al vector resto "auxiliar"
                     auxiliar = funciones.agruparBits(auxiliar, sobrante, sizeAuxiliar,sobrante.size());
                     sizeAuxiliar = auxiliar.size();
@@ -254,7 +256,7 @@ public class Archivo{
                 // Si el archivo no existe, se crea
                 if (!f.exists()) {
                     f.createNewFile();
-                    System.out.println("\nARCHIVO CREADO: " +nuevo + "\n");
+                    System.out.println("\nARCHIVO CREADO: " + nuevo + "\n");
                 }
 
 
@@ -265,7 +267,6 @@ public class Archivo{
                 caracter = funciones.bitstoCharacters(bits);
 
                 for(char i:caracter){//imprimimos cada caracter leido
-                    System.out.println(i);
                     bw.write(i);
                 }
 

@@ -77,6 +77,7 @@ public class Decodificar{
                             }
 
                             Archivo.escribir(nombre, contenedor);
+                            System.out.println(contenedor);
                             contenedor.clear();
                         }
 
@@ -92,8 +93,8 @@ public class Decodificar{
                     caract=br.read();
                 }
 
-                if( (bloque.size()%bits) != 0){//Nos quedamos con un bloque sin completar
-                    while( (bloque.size()%bits) != 0){
+                if( bloque.size() != bits){//Nos quedamos con un bloque sin completar
+                    while( bloque.size() < bits){
                         bloque.add(0);
                     }
                     informacion = funciones.decodificar(bloque);
@@ -102,13 +103,14 @@ public class Decodificar{
 
                 while( informacion.size()>bits ){//Hay mas de un caracter
 
-                    while( (contenedor.size()%bits) != 0 ){
+                    while( contenedor.size() != bits ){
 
                         contenedor.add(informacion.get(0));//Metemos el primer bit del arreglo aux
                         informacion.remove(0);//Borramos ese elemento que ingresamos
                     
                     }
                     Archivo.escribir(nombre, contenedor);
+                    System.out.println(contenedor);
                     contenedor.clear();
                 
                 }
@@ -120,6 +122,7 @@ public class Decodificar{
                 }
 
                 Archivo.escribir(nombre, informacion);
+                System.out.println(informacion);
                 informacion.clear();
 
             }
