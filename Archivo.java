@@ -70,8 +70,6 @@ public class Archivo{
                 }    
                                 
                 if (sizePrincipal == bloque) { //si array principal está lleno, puede enviarse a la funcion que aplique hamming
-                    
-                    System.out.println(principal);
 
                     sobrante = funciones.aplicarHamming(principal, (int)(Math.log(bloque)/Math.log(2)), error);//Sobrante tiene los bits que sobraron,se los debo agregar al vector resto "auxiliar"
                     auxiliar = funciones.agruparBits(auxiliar, sobrante, sizeAuxiliar,sobrante.size());
@@ -263,6 +261,9 @@ public class Archivo{
                 // flag true, indica adjuntar información al archivo.
                 fw = new FileWriter(f.getAbsoluteFile(), true);
                 bw = new BufferedWriter(fw);
+
+                System.out.println("\nEstamos en escribir\n");
+                System.out.println(bits);
 
                 caracter = funciones.bitstoCharacters(bits);
 
