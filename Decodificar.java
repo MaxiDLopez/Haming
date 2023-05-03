@@ -55,17 +55,24 @@ public class Decodificar{
                 while(caract != -1){//Si el caracter no es nulo
                 
                     aux = funciones.CaracterToBits(caract);
+
                     for(int i:aux){
                         bloque.add(i);
                     }
 
+                    System.out.println(bloque);
+
                     if( bloque.size() == bits){//Completamos un bloque pero con bits de control
+
+
 
                         aux = funciones.decodificar(bloque);//Decodficamos el bloque y agregamos la informacion en un nuevo arreglo
                         bloque.clear();//Reiniciamos el bloque
                         for(int i:aux){
                             informacion.add(i);
                         }
+
+                        System.out.println(informacion);
 
                         if( informacion.size() >= bits){//Completamos un bloque solamente de informacion
 
