@@ -60,11 +60,9 @@ public class Decodificar{
                         bloque.add(i);
                     }
 
-                    System.out.println(bloque);
+                    System.out.println("Bloque: "+bloque);
 
                     if( bloque.size() == bits){//Completamos un bloque pero con bits de control
-
-
 
                         aux = funciones.decodificar(bloque);//Decodficamos el bloque y agregamos la informacion en un nuevo arreglo
                         bloque.clear();//Reiniciamos el bloque
@@ -72,7 +70,8 @@ public class Decodificar{
                             informacion.add(i);
                         }
 
-                        System.out.println(informacion);
+                        System.out.println("Informacion: "+informacion);
+                        System.out.println("Informacion cantidad: "+ informacion.size());
 
                         if( informacion.size() >= bits){//Completamos un bloque solamente de informacion
 
@@ -84,15 +83,10 @@ public class Decodificar{
                             }
 
                             Archivo.escribir(nombre, contenedor);
-                            System.out.println(contenedor);
+                            System.out.println("contenedor: "+contenedor);
+                            System.out.println("Informacion: "+informacion);
+                            System.out.println("Informacion cantidad: "+ informacion.size());
                             contenedor.clear();
-                        }
-
-                        if( (contenedor.size()%bits) == 0){//Preguntamos si se detuvo el while porque ya esta listo para escribir en el archivo
-
-                            Archivo.escribir(nombre, contenedor);//Pasamos a escribir en el archivo
-                            contenedor.clear();//Borramos todo ya que lo escribimos
-                        
                         }
                     
                     }
@@ -100,17 +94,24 @@ public class Decodificar{
                     caract=br.read();
                 }
 
-                if( bloque.size() != bits){//Nos quedamos con un bloque sin completar
-                    while( bloque.size() < bits){
+                if(!bloque.isEmpty()){//Nos quedamos con un bloque sin completar
+
+                    System.out.println("\nQUEDARON BITS EN EL BLoQOUE\n");
+                    
+                    while( bloque.size() < bits){//Lo completamos con 0
                         bloque.add(0);
                     }
+                    
                     informacion = funciones.decodificar(bloque);
                     bloque.clear();
+
                 }//Ya completamos el ultimo bloque codificado
 
-                while( informacion.size()>bits ){//Hay mas de un caracter
+                if ( informacion.size() > bits ){//Hay mas de un caracter para imprimir
 
-                    while( contenedor.size() != bits ){
+                    System.out.println("\nQUEDARON MAS DE UN CARACTER EN Informacion\n");
+
+                    while( contenedor.size() < bits ){
 
                         contenedor.add(informacion.get(0));//Metemos el primer bit del arreglo aux
                         informacion.remove(0);//Borramos ese elemento que ingresamos
@@ -122,16 +123,19 @@ public class Decodificar{
                 
                 }
 
-                if(!informacion.isEmpty()){
-                    while( (informacion.size()%bits) != 0){
+                if(!informacion.isEmpty() & informacion.contains(1)){
+                    
+                    System.out.println("\nQUEDARON " + informacion.size() + " bits en informacion \n");
+                    while( informacion.size() < bits){
                         informacion.add(0);
                     }
+
+                    Archivo.escribir(nombre, informacion);
+                    System.out.println(informacion);
+                    informacion.clear();
                 }
 
-                Archivo.escribir(nombre, informacion);
-                System.out.println(informacion);
-                informacion.clear();
-
+ 
             }
 
             else{//Si no existe el archivo

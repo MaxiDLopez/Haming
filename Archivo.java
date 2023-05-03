@@ -262,9 +262,6 @@ public class Archivo{
                 fw = new FileWriter(f.getAbsoluteFile(), true);
                 bw = new BufferedWriter(fw);
 
-                System.out.println("\nEstamos en escribir\n");
-                System.out.println(bits);
-
                 caracter = funciones.bitstoCharacters(bits);
 
                 for(char i:caracter){//imprimimos cada caracter leido
